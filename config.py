@@ -38,6 +38,7 @@ _playlist = _cfg.get("playlist", {})
 PLAYLIST_NAME_FORMAT = _playlist.get("name_format", "Music Discoveries - {date}")
 MIN_TRACKS = _playlist.get("min_tracks", 40)
 MAX_TRACKS = _playlist.get("max_tracks", 60)
+MAX_RELEASE_AGE_YEARS = _playlist.get("max_release_age_years", 3)
 
 # --- Scraping parameters (not user-facing) ---
 REQUEST_DELAY_SECONDS = 2.0
@@ -82,11 +83,12 @@ DEALBREAKER_GENRES = _cfg.get("dealbreaker_genres", [
 
 # --- Scoring weights ---
 _default_scoring = {
-    "source_weight": 0.30,
-    "source_count": 0.25,
-    "genre_match": 0.25,
+    "source_weight": 0.25,
+    "source_count": 0.20,
+    "genre_match": 0.20,
     "taste_profile": 0.05,
-    "recency": 0.10,
+    "recency": 0.05,
+    "release_recency": 0.20,
     "feedback": 0.05,
 }
 SCORING_WEIGHTS = {**_default_scoring, **_cfg.get("scoring_weights", {})}

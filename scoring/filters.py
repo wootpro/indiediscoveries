@@ -2,8 +2,9 @@
 import logging
 import re
 from collections import Counter
+from datetime import date
 
-from config import DEALBREAKER_GENRES
+from config import DEALBREAKER_GENRES, MAX_RELEASE_AGE_YEARS
 from storage.database import get_recently_played_keys
 from storage.models import ScoredTrack
 
@@ -106,6 +107,32 @@ def apply_pre_spotify_filters(tracks: list[ScoredTrack]) -> list[ScoredTrack]:
     return tracks
 
 
+def filter_old_releases(tracks: list[ScoredTrack]) -> list[ScoredTrack]:
+    """Remove tracks whose Spotify release date is older than MAX_RELEASE_AGE_YEARS.
+
+    Tracks with no release date are kept — we can't confirm they're old.
+    """
+    cutoff = date.today().replace(year=date.today().year - MAX_RELEASE_AGE_YEARS)
+    filtered = []
+    removed = 0
+    for track in tracks:
+        if not track.release_date:
+            filtered.append(track)
+            continue
+        try:
+            rel = date.fromisoformat(track.release_date[:10])
+            if rel >= cutoff:
+                filtered.append(track)
+            else:
+                removed += 1
+        except ValueError:
+            filtered.append(track)
+    if removed:
+        logger.info(f"Removed {removed} tracks with release date older than {MAX_RELEASE_AGE_YEARS} years")
+    return filtered
+
+
 def apply_post_spotify_filters(tracks: list[ScoredTrack]) -> list[ScoredTrack]:
     """Apply filters that need Spotify data (run after Spotify search)."""
+    tracks = filter_old_releases(tracks)
     return filter_no_spotify(tracks)

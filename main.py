@@ -182,6 +182,9 @@ def main():
         cached_uri_count = sum(1 for t in candidates if t.spotify_uri)
         logger.info(f"Rate limited — proceeding with {cached_uri_count} cached Spotify URIs")
 
+    # 7b. Re-score now that release_date is populated — release_recency can finally differentiate tracks
+    candidates = score_all_tracks(candidates)
+
     # 8. Apply post-Spotify filters (remove tracks without URIs)
     filtered_tracks = apply_post_spotify_filters(candidates)
     after_filter_count = len(filtered_tracks)

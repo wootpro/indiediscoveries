@@ -12,6 +12,7 @@ playlist:
   name_format: "Music Discoveries - {date}"   # {date} = "Apr 02"
   min_tracks: 40    # warn if playlist has fewer than this
   max_tracks: 60    # hard cap on playlist size
+  max_release_age_years: 2  # exclude tracks released more than this many years ago
 
 
 # ------------------------------------------------------------
@@ -177,17 +178,19 @@ dealbreaker_genres:
 
 # ------------------------------------------------------------
 # Scoring weights (must sum to 1.0)
-#   source_weight  — how trusted is the best source for this track
-#   source_count   — how many independent sources mentioned it
-#   genre_match    — does the genre match your preferences
-#   taste_profile  — similarity to your taste_profile.json
-#   recency        — how recently it was first discovered
-#   feedback       — learned from your engagement with past playlists
+#   source_weight    — how trusted is the best source for this track
+#   source_count     — how many independent sources mentioned it
+#   genre_match      — does the genre match your preferences
+#   taste_profile    — similarity to your taste_profile.json
+#   recency          — how recently it was first scraped (mention age)
+#   release_recency  — how new the actual song is (release date from Spotify)
+#   feedback         — learned from your engagement with past playlists
 # ------------------------------------------------------------
 scoring_weights:
-  source_weight: 0.30
-  source_count: 0.25
-  genre_match: 0.25
+  source_weight: 0.25
+  source_count: 0.20
+  genre_match: 0.20
   taste_profile: 0.05
-  recency: 0.10
+  recency: 0.05
+  release_recency: 0.20
   feedback: 0.05

@@ -3,7 +3,7 @@ import logging
 import math
 from datetime import date
 
-from config import SOURCE_WEIGHTS, SCORING_WEIGHTS, PREFERRED_GENRES
+from config import SOURCE_WEIGHTS, SCORING_WEIGHTS, PREFERRED_GENRES, MAX_RELEASE_AGE_YEARS
 from enrichment.taste import get_taste_profile
 from enrichment.feedback import get_feedback_score
 from storage.models import ScoredTrack
@@ -55,6 +55,20 @@ def compute_score(track: ScoredTrack) -> float:
             scores["recency"] = 0.5
     else:
         scores["recency"] = 0.5
+
+    # Release recency (0-1): how new is the actual song, not just when we saw it
+    # Linear decay from 1.0 (released today) to 0.0 at MAX_RELEASE_AGE_YEARS.
+    # Unknown release date gets 0.3 — benefit of doubt, but penalised vs confirmed new.
+    if track.release_date:
+        try:
+            rel = date.fromisoformat(track.release_date[:10])
+            days_since_release = (date.today() - rel).days
+            max_days = MAX_RELEASE_AGE_YEARS * 365
+            scores["release_recency"] = max(0.0, 1.0 - days_since_release / max_days)
+        except ValueError:
+            scores["release_recency"] = 0.3
+    else:
+        scores["release_recency"] = 0.3
 
     total = sum(scores.get(k, 0.5) * w for k, w in SCORING_WEIGHTS.items())
     return round(total, 4)
