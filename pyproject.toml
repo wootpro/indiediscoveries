@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "indiemusic"
+version = "1.0.0"
+description = "Automated weekly music discovery — scrapes 10+ sources and builds a Spotify playlist"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=5.0.0",
+    "spotipy>=2.23.0",
+    "musicbrainzngs>=0.7.1",
+    "python-dateutil>=2.8.0",
+    "tenacity>=8.2.0",
+    "feedparser>=6.0.0",
+    "python-dotenv>=1.0.0",
+    "pyyaml>=6.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["storage", "*.db", "*.log"]

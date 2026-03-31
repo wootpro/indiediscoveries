@@ -1,0 +1,193 @@
+# ============================================================
+# IndieMusic Discovery — User Configuration
+# ============================================================
+# Edit this file to customize the discovery pipeline.
+# Secrets (Spotify credentials) stay in .env — not here.
+
+
+# ------------------------------------------------------------
+# Playlist settings
+# ------------------------------------------------------------
+playlist:
+  name_format: "Music Discoveries - {date}"   # {date} = "Apr 02"
+  min_tracks: 40    # warn if playlist has fewer than this
+  max_tracks: 60    # hard cap on playlist size
+
+
+# ------------------------------------------------------------
+# Scrapers to enable
+# Disable sources you don't want by commenting them out.
+#
+# Available scrapers:
+#   kexp             — KEXP radio (Seattle) — JSON API
+#   nts              — NTS Radio tracklists — JSON API
+#   bbc_6music       — BBC 6 Music playlists — JSON API
+#   pitchfork        — Pitchfork best new tracks
+#   stereogum        — Stereogum new music
+#   gorilla_vs_bear  — Gorilla vs Bear blog
+#   reddit_indieheads — r/indieheads via Reddit API
+#   hype_machine     — Hype Machine popular tracks
+#   album_of_the_year — AOTY new releases (albums → tracks)
+#   blog_rss         — All configured blog RSS feeds (see below)
+# ------------------------------------------------------------
+enabled_scrapers:
+  - kexp
+  - nts
+  - bbc_6music
+  - pitchfork
+  - stereogum
+  - gorilla_vs_bear
+  - reddit_indieheads
+  - hype_machine
+  - album_of_the_year
+  - blog_rss
+
+
+# ------------------------------------------------------------
+# Blog RSS feeds (only used when blog_rss is enabled above)
+# Each entry needs a name, source_key, url, and parser type.
+#
+# Built-in parser types:
+#   dash_quoted   — 'Artist -- "Track"' format
+#   shares_new    — 'Artist shares new single "Track"' format
+#   colon         — 'Artist :: Track' format
+#   blackwater    — Blackwater Collective numbered format
+#   post_trash    — Post-Trash 'Artist - "Track" | Review' format
+#   generic       — tries all of the above in order
+# ------------------------------------------------------------
+blog_rss_feeds:
+  - name: obscure_sound
+    url: "https://obscuresound.com/feed/"
+    parser: dash_quoted
+
+  - name: earmilk
+    url: "https://earmilk.com/feed/"
+    parser: shares_new
+
+  - name: line_of_best_fit
+    url: "https://www.thelineofbestfit.com/feed"
+    parser: shares_new
+
+  - name: aquarium_drunkard
+    url: "https://aquariumdrunkard.com/feed/"
+    parser: colon
+
+  - name: brooklyn_vegan
+    url: "https://www.brooklynvegan.com/feed/"
+    parser: generic
+
+  - name: blackwater_collective
+    url: "https://blackwaterco.org/feed/"
+    parser: blackwater
+
+  - name: post_trash
+    url: "https://post-trash.com/news?format=rss"
+    parser: post_trash
+
+
+# ------------------------------------------------------------
+# Source weights
+# Higher = more trusted. Used in scoring.
+# Any source not listed here defaults to 1.0.
+# ------------------------------------------------------------
+source_weights:
+  kexp: 3.0
+  nts: 3.0
+  bbc_6music: 3.0
+  pitchfork: 3.0
+  stereogum: 2.5
+  gorilla_vs_bear: 2.5
+  aquarium_drunkard: 2.0
+  line_of_best_fit: 2.0
+  brooklyn_vegan: 2.0
+  obscure_sound: 1.5
+  earmilk: 1.5
+  post_trash: 1.5
+  blackwater_collective: 1.5
+  hype_machine: 1.5
+  album_of_the_year: 1.5
+  reddit_indieheads: 1.5
+
+
+# ------------------------------------------------------------
+# Preferred genres
+# Tracks whose MusicBrainz genre matches any of these score
+# higher. Partial matches work (e.g. "rock" matches "indie rock").
+# ------------------------------------------------------------
+preferred_genres:
+  - rock
+  - indie
+  - electronic
+  - experimental
+  - alternative
+  - post-punk
+  - shoegaze
+  - synth
+  - garage
+  - punk
+  - noise
+  - krautrock
+  - new wave
+  - hip hop
+  - r&b
+  - trip hop
+  - downtempo
+  - dream pop
+  - art rock
+  - math rock
+  - lo-fi
+  - psychedelic
+  - jazz
+  - funk
+  - soul
+  - electropop
+  - synthpop
+  - dance-punk
+  - no wave
+  - ambient
+  - idm
+  - breakbeat
+  - britpop
+  - jangle pop
+  - power pop
+  - emo
+
+
+# ------------------------------------------------------------
+# Dealbreaker genres
+# Tracks whose genre matches any of these are excluded entirely.
+# ------------------------------------------------------------
+dealbreaker_genres:
+  - country
+  - metal
+  - hardcore
+  - metalcore
+  - death metal
+  - black metal
+  - thrash metal
+  - grindcore
+  - deathcore
+  - nu metal
+  - mainstream pop
+  - schlager
+  - christian
+  - worship
+  - gospel
+
+
+# ------------------------------------------------------------
+# Scoring weights (must sum to 1.0)
+#   source_weight  — how trusted is the best source for this track
+#   source_count   — how many independent sources mentioned it
+#   genre_match    — does the genre match your preferences
+#   taste_profile  — similarity to your taste_profile.json
+#   recency        — how recently it was first discovered
+#   feedback       — learned from your engagement with past playlists
+# ------------------------------------------------------------
+scoring_weights:
+  source_weight: 0.30
+  source_count: 0.25
+  genre_match: 0.25
+  taste_profile: 0.05
+  recency: 0.10
+  feedback: 0.05

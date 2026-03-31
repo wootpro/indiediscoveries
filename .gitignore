@@ -1,0 +1,27 @@
+# Secrets
+.env
+.spotify_cache
+
+# Personal data — users create their own
+taste_profile.json
+user_config.yaml
+
+# Runtime output
+storage/*.db
+indie_music.log
+last_run_report.html
+run_log.txt
+
+# Tools
+.claude/
+.playwright-mcp/
+*.png
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
