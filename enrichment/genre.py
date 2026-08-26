@@ -14,9 +14,9 @@ musicbrainzngs.set_useragent("IndieMusicDiscovery", "1.0", "indie-music-discover
 logging.getLogger("musicbrainzngs").setLevel(logging.WARNING)
 
 GENRE_MAP = {
-    "rock": "Rock",
     "indie": "Indie",
     "alternative": "Indie",
+    "rock": "Rock",
     "electronic": "Electronic",
     "experimental": "Experimental",
     "punk": "Rock",

@@ -46,10 +46,10 @@ def collect_feedback():
         if not track_ids:
             continue
 
-        # Check which tracks are saved in user's library (batch of 50)
+        # Check which tracks are saved in user's library (Spotify limit: 20 per request)
         saved_set = set()
-        for i in range(0, len(track_ids), 50):
-            batch = track_ids[i:i + 50]
+        for i in range(0, len(track_ids), 20):
+            batch = track_ids[i:i + 20]
             try:
                 results = sp.current_user_saved_tracks_contains(batch)
                 for tid, is_saved in zip(batch, results):
